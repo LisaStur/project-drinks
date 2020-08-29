@@ -1,26 +1,34 @@
 import React, { useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchDrinks } from 'reducers/drinks'
+import { DrinkCard } from 'components/DrinkCard'
+import styled from 'styled-components'
 
 export const DrinkList = () => {
   const dispatch = useDispatch()
   const drinks = useSelector((state) => state.drinks.drinkData)
 
   useEffect(() => {
-    if (drinks.length) {
+    if (drinks) {
       return;
     }
     dispatch(fetchDrinks());
   }, [dispatch, drinks]);
 
   return (
-    <div>
+    <Container>
       {drinks.map((drink, i) => (
-        <Link key={i} to={`/drinks/${drink.idDrink}`}>
-          <p>{drink.strDrink}</p>
-        </Link>
+        <DrinkCard key={i} drink={drink} />
       ))}
-    </div>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 35px;
+`
